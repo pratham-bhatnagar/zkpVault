@@ -2,7 +2,7 @@ pragma circom 2.0.6;
 
 include "../circomlib/comparators.circom";
 
-template Demo () {
+template credit_score () {
     signal input threshold;
     signal input credit_score;
     signal output out;
