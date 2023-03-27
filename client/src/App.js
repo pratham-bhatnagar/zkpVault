@@ -1,9 +1,10 @@
 import React from "react";
 import { WagmiConfig, createClient } from "wagmi";
 import { ConnectKitProvider, getDefaultClient } from "connectkit";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { polygon, polygonMumbai, goerli, sepolia } from "wagmi/chains";
-import Mint from "./pages/ mint";
 import Hero from "./pages/hero";
+import Proofs from "./pages/proofs";
 
 const chains = [polygonMumbai, goerli, sepolia, polygon];
 const client = createClient(
@@ -17,13 +18,18 @@ function App() {
   return (
     <WagmiConfig client={client}>
       <ConnectKitProvider
-      customTheme={{
-        "--ck-accent-color": "#58ADF7",
-        "--ck-accent-text-color": "#ffffff",
-        "--ck-border-radius": 42,
-      }}>
-        <Hero />
-        <Mint />
+        customTheme={{
+          "--ck-accent-color": "#58ADF7",
+          "--ck-accent-text-color": "#ffffff",
+          "--ck-border-radius": 42,
+        }}
+      >
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Hero />}></Route>
+            <Route path="/proofs" element={<Proofs/>} />
+          </Routes>
+        </BrowserRouter>
       </ConnectKitProvider>
     </WagmiConfig>
   );
