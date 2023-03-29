@@ -11,21 +11,22 @@ import React from "react";
 import axios from "axios";
 import zkpVaultABI from "../abi/zkpVault.json";
 
-const verifierContractAddress = "0x2eDD5193F3bBdd2684Eff5C791BFADf40cD0912b";
+const verifierContractAddress = "0x8FAea139899B4E989b1582BF3a7695889A9D9D56";
 
 const zkpVaultContractConfig = {
-  address: "0xC29Bd3440D2d5F95f615C666A960F17e0cD962b6",
+  address: "0x8ea74734987eb8E55C399807AA25BBa0148A9A87",
   abi: zkpVaultABI,
   chainId: 80001,
 };
 
-const CreditScore = () => {
+const TwitterFollowers = () => {
   const [mounted, setMounted] = React.useState(false);
   React.useEffect(() => setMounted(true), []);
 
   const { address, isConnected } = useAccount();
   const [proofStatus, setProofStatus] = React.useState(false);
-  const [getCreditScore, setCreditScore] = React.useState("");
+  const [getFollowers, setFollowers] = React.useState("");
+  const [getThreshold, setThreshold] = React.useState("");
   const [getCallData, setCallData] = React.useState({});
   const [totalMinted, setTotalMinted] = React.useState(0);
   const [getHasSoul, setHasSoul] = React.useState(false);
@@ -79,6 +80,8 @@ const CreditScore = () => {
     error: mintError,
   } = useContractWrite(zkpVaultMintConfig);
 
+ 
+
   const {
     data: txData,
     isSuccess: txSuccess,
@@ -90,22 +93,17 @@ const CreditScore = () => {
   const isMinted = txSuccess;
 
   async function handleMintButtonClick() {
-    if (isNaN(parseInt(getCreditScore))) {
-      toast.error("Please enter a valid credit score");
+    if (isNaN(parseInt(getFollowers)) && isNaN(parseInt(getThreshold))) {
+      toast.error("Please enter a valid Followers");
       return;
     }
     if (hasSoul) {
       toast.error("Address already minted a SBT");
       return;
     }
-    if (parseInt(getCreditScore) > 100) {
-      toast.error("Credit Score cannot be greater than 100");
-      return;
-    }
+
     const callData = await getCallDataFromServer();
     setCallData(callData);
-
-    console.log("getcallback cccc", callData);
     if (Object.keys(getCallData).length !== 0) {
       mint?.();
     } else {
@@ -113,29 +111,37 @@ const CreditScore = () => {
         icon: "🎉",
       });
       setProofStatus(true);
-      setVerificationAddress(address);
     }
   }
 
-  function handleCreditScoreChange(e) {
-    setCreditScore(e.target.value);
+  function handleFollowersChange(e) {
+    setFollowers(e.target.value);
+  }
+  function handleThresholdChange(e) {
+    setThreshold(e.target.value);
   }
 
   const getCallDataFromServer = React.useCallback(async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/credit/generate-call-data?creditScore=${getCreditScore}`
+        `http://localhost:8080/api/twitter/generate-call-data?followers=${getFollowers}&threshold=${getThreshold}`
       );
+      console.log(response);
       return response.data;
     } catch (error) {
       console.log(error);
       return {};
     }
-  }, [getCreditScore]);
+  }, [getFollowers]);
+
+//   React.useEffect(()=>{
+//   toastOnTxn()
+//   },[isMinted])
 
   React.useEffect(() => {
     if (hasSoul) {
       setHasSoul(true);
+      setVerificationAddress(address);
     } else {
       setHasSoul(false);
     }
@@ -147,31 +153,84 @@ const CreditScore = () => {
     }
   }, [totalSupplyData]);
 
+//   const toastOnTxn = ()=> toast.custom((t) => (
+//     <div
+//       className={`${
+//         t.visible ? "animate-enter" : "animate-leave"
+//       } max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}
+//     >
+//       <div className="flex-1 w-0 p-4">
+//         <div className="flex items-start">
+//           <div className="flex-shrink-0 pt-0.5">
+//             <img
+//               className="h-10 w-10 rounded-full"
+//               src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixqx=6GHAjsWpt9&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.2&w=160&h=160&q=80"
+//               alt=""
+//             />
+//           </div>
+//           <div className="ml-3 flex-1">
+//             <p className="text-sm font-medium text-gray-900">Polyscan</p>
+//             <p className="mt-1 text-sm text-gray-500">
+//               <a
+//                 target="_blank"
+//                 rel="noreferrer"
+//                 href={`https://mumbai.polygonscan.com/tx/${mintData?.hash}`}
+//               >
+//                 View Transaction
+//               </a>
+//             </p>
+//           </div>
+//         </div>
+//       </div>
+//       <div className="flex border-l border-gray-200">
+//         <button
+//           onClick={() => toast.dismiss(t.id)}
+//           className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+//         >
+//           Close
+//         </button>
+//       </div>
+//     </div>
+//   ));
+
   return (
     <>
       {" "}
-      <div className="h-[650px] w-[380px] rounded-md border border-blue-100 bg-blue-50 p-2 shadow-lg hover:shadow-xl ">
+      <div className="h-[650px] w-[25vw] rounded-md border border-blue-100 bg-blue-50 p-2 shadow-lg hover:shadow-xl ">
         <div>
           <Toaster />
         </div>
-        <img   className="h-[250px] object-cover rounded-md" src="./credit.webp"></img>
+
+        <img
+          className="h-[250px] object-cover rounded-md"
+          src="./twitter-verified.webp"
+        ></img>
         <h1 className="text-xl font-extrabold text-center pt-3 text-blue-800 ">
-          Proof Of Credit Score
+          Proof Of Followers
         </h1>
         <div className="p-3">
           <form className="h-[100px] items-center justify-center flex flex-col gap-4 contrast-more:border-slate-400 contrast-more:placeholder-slate-500">
             <input
-              id="credit_score"
+              id="followers"
               type="number"
               className="outline-none  rounded-xl p-3 w-full"
-              placeholder="Input a credit score from 0 to 100"
+              placeholder="Enter number of Followers"
               required
-              value={getCreditScore}
-              onChange={handleCreditScoreChange}
+              value={getFollowers}
+              onChange={handleFollowersChange}
+            />
+            <input
+              id="threshold"
+              type="number"
+              className=" outline-none rounded-xl p-3 w-full"
+              placeholder="Enter Threshold Followers"
+              required
+              value={getThreshold}
+              onChange={handleThresholdChange}
             />
           </form>
-          <div>
-          <div className="flex justify-center mt-2 flex-col items-center">
+
+          <div className="flex mt-2 justify-center flex-col items-center">
             {mintError && (
               <p
                 style={{ marginTop: 2, color: "#FF6257" }}
@@ -204,49 +263,49 @@ const CreditScore = () => {
               </button>
             )}
           </div>
-            <div className="flex mt-6 flex-col gap-2">
-              <p className="font-bold text-xl">Status ℹ️ :</p>
+          <div className="flex mt-6 flex-col gap-2">
+            <p className="font-bold text-xl">Status ℹ️ :</p>
+
+            <div
+              className={`flex rounded-xl font-semibold text-sm justify-between border ${
+                hasSoul
+                  ? `border-green-200 bg-green-100`
+                  : `border-red-200 bg-red-100`
+              }  p-4 items-center `}
+            >
+              <p>SBT </p>
+              <p
+                className={`${
+                  hasSoul ? `bg-green-400` : `bg-red-400 text-white`
+                }  rounded-full px-3 py-1`}
+              >
+                {hasSoul ? "Minted" : "Not Minted"}
+              </p>
+            </div>
+            {hasSoul ? (
               <div
-                className={`flex rounded-xl font-semibold text-sm justify-between border ${
-                  hasSoul
+                className={`flex rounded-xl justify-between font-semibold text-sm border ${
+                  getVerificationStatus
                     ? `border-green-200 bg-green-100`
                     : `border-red-200 bg-red-100`
                 }  p-4 items-center `}
               >
-                <p>SBT </p>
+                <p>Proof </p>
                 <p
                   className={`${
-                    hasSoul ? `bg-green-400` : `bg-red-400 text-white`
+                    getVerificationStatus ? `bg-green-400` : `bg-red-400 text-white`
                   }  rounded-full px-3 py-1`}
                 >
-                  {hasSoul ? "Minted" : "Not Minted"}
+                  {getVerificationStatus ? "Verified" : "Not Verified"}
                 </p>
               </div>
-
-              {hasSoul ? (
-                <div
-                  className={`flex rounded-xl justify-between font-semibold text-sm border ${
-                    getVerificationStatus
-                      ? `border-green-200 bg-green-100`
-                      : `border-red-200 bg-red-100`
-                  }  p-4 items-center `}
-                >
-                  <p>Proof </p>
-                  <p
-                    className={`${
-                      getVerificationStatus ? `bg-green-400` : `bg-red-400 text-white`
-                    }  rounded-full px-3 py-1`}
-                  >
-                    {getVerificationStatus ? "Verified" : "Not Verified"}
-                  </p>
-                </div>
-              ) : (
-                <></>
-              )}
-            </div>
+            ) : (
+              <></>
+            )}
           </div>
+
           <p className="select-none italic opacity-80 mt-3  text-center text-xs font-semibold">
-            {totalMinted} Proof of Crefit Score ZK SBT minted so far!
+            {totalMinted} Proof of Followers ZK SBT minted so far!
           </p>
         </div>
       </div>
@@ -254,4 +313,4 @@ const CreditScore = () => {
   );
 };
 
-export default CreditScore;
+export default TwitterFollowers;

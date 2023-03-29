@@ -1,9 +1,11 @@
 const Hero = () => {
   return (
-    <div className="h-full">
+    <div className="h-[100vh] w-full bg-[url('https://img.freepik.com/free-vector/white-background-with-zigzag-pattern-design_1017-33197.jpg')]">
       <div className="p-3 px-[8vw] flex justify-between">
         <p className="text-3xl text-blue-500 font-bold">zkpVault </p>
-        <button className=" px-3 py-2 bg-[#191919] text-white rounded-md font-semibold">
+        <button onClick={()=>{
+        
+        }} className=" px-3 py-2 bg-[#191919] text-white rounded-md font-semibold">
           Launch App
         </button>
       </div>
