@@ -208,7 +208,7 @@ const {
             <p
              className="cursor-pointer font-mono hover:underline font-bold"
               onClick={() => {
-                navigator.clipboard.writeText(JSON.stringify(sbtDataTwitter));
+                navigator.clipboard.writeText(sbtDataTwitter);
                 toast("Copied to Clipboard", {
                   icon: "📋",
                 });
@@ -233,7 +233,7 @@ const {
             <p
              className="cursor-pointer font-mono hover:underline font-bold"
               onClick={() => {
-                navigator.clipboard.writeText(JSON.stringify(sbtDataAge));
+                navigator.clipboard.writeText(sbtDataAge);
                 toast("Copied to Clipboard", {
                   icon: "📋",
                 });

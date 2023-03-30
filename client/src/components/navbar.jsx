@@ -6,7 +6,6 @@ return <div className=" flex justify-between w-full items-center bg-white p-2 bo
   <div className="flex gap-8 text-lg font-bold  ">
   <a href="/proofs"><p className="hover:underline cursor-pointer">Generate Proofs</p></a>  
    <a href="/myproofs"> <p className="hover:underline cursor-pointer">My Proofs</p></a>
-   <p className="hover:underline cursor-pointer">Verify Proofs</p>
   </div>
     <ConnectKitButton/>
 </div>

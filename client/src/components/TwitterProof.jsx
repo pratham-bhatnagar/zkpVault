@@ -10,7 +10,7 @@ import React from "react";
 import axios from "axios";
 import zkpVaultABI from "../abi/zkpVault.json";
 
-const verifierContractAddress = "0x8FAea139899B4E989b1582BF3a7695889A9D9D56";
+const verifierContractAddress = "0x76AB06c228412d448d1bd1405a561fB30C6C47A0";
 
 const zkpVaultContractConfig = {
   address: "0x2923fffc9ba79400F74A3a644D966370441eD653",
@@ -64,6 +64,7 @@ const TwitterFollowers = () => {
       setVerificationStatus(true);
     },
   });
+
 
   const { config: zkpVaultMintConfig } = usePrepareContractWrite({
     ...zkpVaultContractConfig,

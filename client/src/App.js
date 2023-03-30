@@ -8,6 +8,7 @@ import Proofs from "./pages/proofs";
 import Main from "./pages/main";
 import MyProofs from "./pages/MyProofs";
 
+
 const chains = [polygonMumbai, goerli, sepolia, polygon];
 const client = createClient(
   getDefaultClient({
@@ -33,6 +34,7 @@ function App() {
             <Route path="/proofs" element={<Proofs />} />
             <Route path="/main" element={<Main />} />
             <Route path="/myproofs" element={<MyProofs />} />
+           
           </Routes>
         </BrowserRouter>
       </ConnectKitProvider>
