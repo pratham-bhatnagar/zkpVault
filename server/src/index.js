@@ -1,10 +1,16 @@
 import express from "express";
 import cors from "cors";
-import { generateCallDataCredit,generateProofCredit,generateCallDataTwitter,generateProofTwitter,generateCallDataAge,generateProofAge} from "./lib/zkutils.js";
+import {
+  generateCallDataCredit,
+  generateProofCredit,
+  generateCallDataTwitter,
+  generateProofTwitter,
+  generateCallDataAge,
+  generateProofAge,
+} from "./lib/zkutils.js";
 
 const app = express();
 const port = 8080;
-
 
 app.set("trust proxy", true);
 
@@ -17,16 +23,19 @@ app.get("/", (req, res) => {
 });
 
 // Twitter Verification
-app.get("/api/twitter/generate-call-data", async(req,res,next)=>{
-try{
-  console.log("Generating proof...");
+app.get("/api/twitter/generate-call-data", async (req, res, next) => {
+  try {
+    console.log("Generating proof...");
     const followers = req.query.followers;
     const threshold = req.query.threshold;
     // check if creditScore is a number
     if (isNaN(followers) && isNaN(threshold)) {
       return res.status(400).send("followers must be a number");
     }
-    const { a, b, c, Input } = await generateCallDataTwitter(followers,threshold);
+    const { a, b, c, Input } = await generateCallDataTwitter(
+      followers,
+      threshold
+    );
 
     if (a === null || b === null || c === null || Input === null) {
       return res.status(400).send("Error generating call data");
@@ -38,12 +47,11 @@ try{
     console.log("c", c);
     console.log("Input", Input);
     return res.status(200).send({ a, b, c, Input });
-
-}catch(err){
-  console.log(`Error Message ${err.message}`)
-  next(err);
-}
-})
+  } catch (err) {
+    console.log(`Error Message ${err.message}`);
+    next(err);
+  }
+});
 
 app.get("/api/twitter/generate-proof", async (req, res, next) => {
   try {
@@ -54,7 +62,10 @@ app.get("/api/twitter/generate-proof", async (req, res, next) => {
     if (isNaN(followers) && isNaN(threshold)) {
       return res.status(400).send("Followes and Threshold must be a number");
     }
-    const { proof, publicSignals } = await generateProofTwitter(followers,threshold);
+    const { proof, publicSignals } = await generateProofTwitter(
+      followers,
+      threshold
+    );
 
     // check if proofJson is null
     if (proof == null) {
@@ -66,9 +77,6 @@ app.get("/api/twitter/generate-proof", async (req, res, next) => {
     next(error);
   }
 });
-
-
-
 
 // Credit Score
 app.get("/api/credit/generate-call-data", async (req, res, next) => {
@@ -165,7 +173,6 @@ app.get("/api/age/generate-proof", async (req, res, next) => {
     next(error);
   }
 });
-
 
 app.use("*", (req, res) => {
   res.status(405).json({
