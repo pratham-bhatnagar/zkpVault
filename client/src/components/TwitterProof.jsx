@@ -1,4 +1,3 @@
-import { ConnectKitButton } from "connectkit";
 import { Toaster, toast } from "react-hot-toast";
 import {
   useAccount,
@@ -14,7 +13,7 @@ import zkpVaultABI from "../abi/zkpVault.json";
 const verifierContractAddress = "0x8FAea139899B4E989b1582BF3a7695889A9D9D56";
 
 const zkpVaultContractConfig = {
-  address: "0x8ea74734987eb8E55C399807AA25BBa0148A9A87",
+  address: "0x2923fffc9ba79400F74A3a644D966370441eD653",
   abi: zkpVaultABI,
   chainId: 80001,
 };
@@ -209,7 +208,7 @@ const TwitterFollowers = () => {
           Proof Of Followers
         </h1>
         <div className="p-3">
-          <form className="h-[100px] items-center justify-center flex flex-col gap-4 contrast-more:border-slate-400 contrast-more:placeholder-slate-500">
+        {!hasSoul &&  <form className="h-[100px] items-center justify-center flex flex-col gap-4 contrast-more:border-slate-400 contrast-more:placeholder-slate-500">
             <input
               id="followers"
               type="number"
@@ -219,16 +218,17 @@ const TwitterFollowers = () => {
               value={getFollowers}
               onChange={handleFollowersChange}
             />
-            <input
+            <div className="flex gap-3 items-center" > <p className="font-bold">I have more than</p>  <input
               id="threshold"
               type="number"
-              className=" outline-none rounded-xl p-3 w-full"
-              placeholder="Enter Threshold Followers"
+              className=" outline-none   w-[88px] rounded-lg placeholder:italic p-1"
+              placeholder="e.g : 100"
               required
               value={getThreshold}
               onChange={handleThresholdChange}
-            />
-          </form>
+            /> <p className="font-bold"> follower(s)</p></div>
+          
+          </form>}
 
           <div className="flex mt-2 justify-center flex-col items-center">
             {mintError && (

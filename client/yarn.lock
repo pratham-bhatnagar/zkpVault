@@ -5337,6 +5337,11 @@ dns-packet@^5.2.2:
   dependencies:
     "@leichtgewicht/ip-codec" "^2.0.1"
 
+dob-to-age@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/dob-to-age/-/dob-to-age-1.0.0.tgz#c45500ef159d012b78d0fa531700743034aa6da6"
+  integrity sha512-66DiiwMUyiqvqpRCXaYGDgkwUQqins0S+6GfI9MY4r2BLwxW2Ip3J02RFAOATsAP/MN4jqklkFSzYyBnuKLyvQ==
+
 doctrine@^2.1.0:
   version "2.1.0"
   resolved "https://registry.npmjs.org/doctrine/-/doctrine-2.1.0.tgz"

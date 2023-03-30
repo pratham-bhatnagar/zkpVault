@@ -6,25 +6,28 @@ import {
   useContractWrite,
   useContractRead,
 } from "wagmi";
+import dobToAge from "dob-to-age";
+
 import React from "react";
 import axios from "axios";
 import zkpVaultABI from "../abi/zkpVault.json";
 
-const verifierContractAddress = "0x2eDD5193F3bBdd2684Eff5C791BFADf40cD0912b";
+const verifierContractAddress = "0xFe6CEF40157292884CFab478a2d035a00B254390";
 
 const zkpVaultContractConfig = {
-  address: "0x0E75923149e6857Dc596f1ade0E1919200973629",
+  address: "0x8f017C15DE334adeCB03069F2533F1230617d2D0",
   abi: zkpVaultABI,
   chainId: 80001,
 };
 
-const CreditScore = () => {
+const AgeVerification = () => {
   const [mounted, setMounted] = React.useState(false);
   React.useEffect(() => setMounted(true), []);
+  const dateInputRef = React.useRef(null);
 
   const { address, isConnected } = useAccount();
   const [proofStatus, setProofStatus] = React.useState(false);
-  const [getCreditScore, setCreditScore] = React.useState("");
+  const [getAge, setAge] = React.useState("");
   const [getCallData, setCallData] = React.useState({});
   const [totalMinted, setTotalMinted] = React.useState(0);
   const [getHasSoul, setHasSoul] = React.useState(false);
@@ -89,22 +92,14 @@ const CreditScore = () => {
   const isMinted = txSuccess;
 
   async function handleMintButtonClick() {
-    if (isNaN(parseInt(getCreditScore))) {
-      toast.error("Please enter a valid credit score");
-      return;
-    }
     if (hasSoul) {
       toast.error("Address already minted a SBT");
       return;
     }
-    if (parseInt(getCreditScore) > 100) {
-      toast.error("Credit Score cannot be greater than 100");
-      return;
-    }
+
     const callData = await getCallDataFromServer();
     setCallData(callData);
 
-    console.log("getcallback cccc", callData);
     if (Object.keys(getCallData).length !== 0) {
       mint?.();
     } else {
@@ -117,20 +112,22 @@ const CreditScore = () => {
   }
 
   function handleCreditScoreChange(e) {
-    setCreditScore(e.target.value);
+    setAge(e.target.value);
   }
 
   const getCallDataFromServer = React.useCallback(async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/credit/generate-call-data?creditScore=${getCreditScore}`
+        `http://localhost:8080/api/age/generate-call-data?age=${dobToAge(getAge)}`
       );
+      console.log(response.data)
       return response.data;
+      
     } catch (error) {
       console.log(error);
       return {};
     }
-  }, [getCreditScore]);
+  }, [getAge]);
 
   React.useEffect(() => {
     if (hasSoul) {
@@ -154,56 +151,59 @@ const CreditScore = () => {
         <div>
           <Toaster />
         </div>
-        <img   className="h-[250px] object-cover rounded-md" src="./credit.webp"></img>
+        <img
+          className="h-[250px] w-full object-cover rounded-md"
+          src="./age.jpeg"
+        ></img>
         <h1 className="text-xl font-extrabold text-center pt-3 text-blue-800 ">
-          Proof Of Credit Score
+          Proof Of Age
         </h1>
         <div className="p-3">
-        {!hasSoul &&  <form className="h-[100px] items-center justify-center flex flex-col gap-4 contrast-more:border-slate-400 contrast-more:placeholder-slate-500">
-            <input
-              id="credit_score"
-              type="number"
-              className="outline-none  rounded-xl p-3 w-full"
-              placeholder="Input a credit score from 0 to 100"
-              required
-              value={getCreditScore}
-              onChange={handleCreditScoreChange}
-            />
-          </form>}
+        {!hasSoul &&<form className="h-[100px] items-center justify-center flex flex-col gap-4 contrast-more:border-slate-400 contrast-more:placeholder-slate-500">
+          <input
+            id="Age"
+            type="date"
+            className="outline-none  rounded-xl p-3 w-full"
+            placeholder="Input a credit score from 0 to 100"
+            required
+            ref={dateInputRef}
+            onChange={handleCreditScoreChange}
+          />
+        </form>}
           <div>
-          <div className="flex justify-center mt-2 flex-col items-center">
-            {mintError && (
-              <p
-                style={{ marginTop: 2, color: "#FF6257" }}
-                className="overflow-x-auto"
-              >
-                Error: {mintError.message}
-              </p>
-            )}
-            {txError && (
-              <p
-                style={{ marginTop: 2, color: "#FF6257" }}
-                className="overflow-x-auto"
-              >
-                Error: {txError.message}
-              </p>
-            )}
+            <div className="flex justify-center mt-2 flex-col items-center">
+              {mintError && (
+                <p
+                  style={{ marginTop: 2, color: "#FF6257" }}
+                  className="overflow-x-auto"
+                >
+                  Error: {mintError.message}
+                </p>
+              )}
+              {txError && (
+                <p
+                  style={{ marginTop: 2, color: "#FF6257" }}
+                  className="overflow-x-auto"
+                >
+                  Error: {txError.message}
+                </p>
+              )}
 
-            {mounted && isConnected && !isMinted && !hasSoul && (
-              <button
-                disabled={isMintLoading || isMintStarted}
-                className="p-2 border bg-violet-200 border-blue-300 w-[200px]  transition ease-in-out delay-100 hover:-translate-y-1 hover:scale-110  duration-300 hover:shadow-lg rounded-md   m-4"
-                data-mint-loading={isMintLoading}
-                data-mint-started={isMintStarted}
-                onClick={() => handleMintButtonClick()}
-              >
-                {isMintLoading && "Waiting for approval"}
-                {isMintStarted && "Minting..."}
-                {!isMintLoading && !isMintStarted && proofStatus && "Mint"}
-                {!proofStatus && "Generate Proof 🎉"}
-              </button>
-            )}
-          </div>
+              {mounted && isConnected && !isMinted && !hasSoul && (
+                <button
+                  disabled={isMintLoading || isMintStarted}
+                  className="p-2 border bg-violet-200 border-blue-300 w-[200px]  transition ease-in-out delay-100 hover:-translate-y-1 hover:scale-110  duration-300 hover:shadow-lg rounded-md   m-4"
+                  data-mint-loading={isMintLoading}
+                  data-mint-started={isMintStarted}
+                  onClick={() => handleMintButtonClick()}
+                >
+                  {isMintLoading && "Waiting for approval"}
+                  {isMintStarted && "Minting..."}
+                  {!isMintLoading && !isMintStarted && proofStatus && "Mint"}
+                  {!proofStatus && "Generate Proof 🎉"}
+                </button>
+              )}
+            </div>
             <div className="flex mt-6 flex-col gap-2">
               <p className="font-bold text-xl">Status ℹ️ :</p>
               <div
@@ -234,7 +234,9 @@ const CreditScore = () => {
                   <p>Proof </p>
                   <p
                     className={`${
-                      getVerificationStatus ? `bg-green-400` : `bg-red-400 text-white`
+                      getVerificationStatus
+                        ? `bg-green-400`
+                        : `bg-red-400 text-white`
                     }  rounded-full px-3 py-1`}
                   >
                     {getVerificationStatus ? "Verified" : "Not Verified"}
@@ -246,7 +248,7 @@ const CreditScore = () => {
             </div>
           </div>
           <p className="select-none italic opacity-80 mt-3  text-center text-xs font-semibold">
-            {totalMinted} Proof of Crefit Score ZK SBT minted so far!
+            {totalMinted} Proof of Age ZK SBT minted so far!
           </p>
         </div>
       </div>
@@ -254,4 +256,4 @@ const CreditScore = () => {
   );
 };
 
-export default CreditScore;
+export default AgeVerification;
