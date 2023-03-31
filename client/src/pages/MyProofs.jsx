@@ -16,7 +16,7 @@ const MyProofs = () => {
   const { address } = useAccount();
   const [getHasSoulCredit, setHasSoulCredit] = React.useState(false);
   const [getHasSoulTwitter, setHasSoulTwitter] = React.useState(false);
-  const [getHasSoulAge,setHasSoulAge] = React.useState(false);
+  const [getHasSoulAge, setHasSoulAge] = React.useState(false);
 
   const zkpVaultContractConfigAge = {
     address: "0x8f017C15DE334adeCB03069F2533F1230617d2D0",
@@ -50,8 +50,6 @@ const MyProofs = () => {
     args: [address],
   });
 
-
-
   const { data: sbtDataCredit } = useContractRead({
     ...zkpVaultContractConfigCredit,
     functionName: "getSBTData",
@@ -80,22 +78,21 @@ const MyProofs = () => {
     args: [address],
   });
 
-// Age Proof Burn
+  // Age Proof Burn
 
-const { config: zkpVaultBurnAgeConfig } = usePrepareContractWrite({
-  ...zkpVaultContractConfigAge,
-  functionName: "burn",
-  args: [address],
-});
+  const { config: zkpVaultBurnAgeConfig } = usePrepareContractWrite({
+    ...zkpVaultContractConfigAge,
+    functionName: "burn",
+    args: [address],
+  });
 
-const {
-  data: burnDataAge,
-  write: burnAge,
-  isLoading: isBurnAgeLoading,
-  isSuccess: isBurnAgeStarted,
-  error: burnErrorAge,
-} = useContractWrite(zkpVaultBurnAgeConfig);
-
+  const {
+    data: burnDataAge,
+    write: burnAge,
+    isLoading: isBurnAgeLoading,
+    isSuccess: isBurnAgeStarted,
+    error: burnErrorAge,
+  } = useContractWrite(zkpVaultBurnAgeConfig);
 
   // Credit Proof Burn
   const { config: zkpVaultBurnCreditConfig } = usePrepareContractWrite({
@@ -135,10 +132,13 @@ const {
     hash: burnData?.hash,
   });
 
+  const hanldleBurnAgeButton = () => {
+    burnAge?.();
+  };
 
-  const handleBurnCreditButton = ()=>{
+  const handleBurnCreditButton = () => {
     burnCredit?.();
-  }
+  };
 
   const handleBurnTwitterButton = () => {
     burnTwitter?.();
@@ -170,18 +170,26 @@ const {
         <div className="grid grid-cols-3 justify-items-center font-bold text-xl p-3 w-full ">
           <p>Proof</p>
           <p>Verification Key</p>
-          <p>{" "} </p>
+          <p> </p>
         </div>
-        {!hasSoulCredit && !hasSoulTwitter &&
-        <div className="w-full p-3 bg-violet-300 border border-violet-400 justify-items-cente rounded-xl">
-<p className="text-center italic text-xl">No Proofs found. You can Generate Proof <a href="/proofs"> <span className="cursor-pointer font-semibold underline">here</span></a></p>
-        </div>
-        }
+        {!hasSoulCredit && !hasSoulTwitter &&  !hasSoulAge &&(
+          <div className="w-full p-3 bg-violet-300 border border-violet-400 justify-items-cente rounded-xl">
+            <p className="text-center italic text-xl">
+              No Proofs found. You can Generate Proof{" "}
+              <a href="/proofs">
+                {" "}
+                <span className="cursor-pointer font-semibold underline">
+                  here
+                </span>
+              </a>
+            </p>
+          </div>
+        )}
         {hasSoulCredit && (
           <div className="p-3 bg-violet-300 border border-violet-400 justify-items-center  grid grid-cols-3 rounded-xl ">
             <p className="w-fit text-xl font-bold">Proof of Credit 💸</p>
             <p
-             className="cursor-pointer font-mono hover:underline font-bold"
+              className="cursor-pointer font-mono hover:underline font-bold"
               onClick={() => {
                 navigator.clipboard.writeText(sbtDataCredit);
                 toast("Copied to Clipboard", {
@@ -189,7 +197,7 @@ const {
                 });
               }}
             >
-             Copy Verification Key
+              Copy Verification Key
             </p>
             <button
               onClick={() => handleBurnCreditButton()}
@@ -206,7 +214,7 @@ const {
           <div className="p-3 bg-violet-300 border border-violet-400 grid grid-cols-3 justify-items-center rounded-xl ">
             <p className="text-xl font-bold">Proof of Followers 👥</p>
             <p
-             className="cursor-pointer font-mono hover:underline font-bold"
+              className="cursor-pointer font-mono hover:underline font-bold"
               onClick={() => {
                 navigator.clipboard.writeText(sbtDataTwitter);
                 toast("Copied to Clipboard", {
@@ -227,11 +235,11 @@ const {
           </div>
         )}
 
-{hasSoulAge && (
+        {hasSoulAge && (
           <div className="p-3 bg-violet-300 border border-violet-400 grid grid-cols-3 justify-items-center rounded-xl ">
             <p className="text-xl font-bold">Proof of Age 🔞</p>
             <p
-             className="cursor-pointer font-mono hover:underline font-bold"
+              className="cursor-pointer font-mono hover:underline font-bold"
               onClick={() => {
                 navigator.clipboard.writeText(sbtDataAge);
                 toast("Copied to Clipboard", {
@@ -242,7 +250,7 @@ const {
               Copy Verification Key
             </p>
             <button
-              onClick={() => handleBurnTwitterButton()}
+              onClick={() => hanldleBurnAgeButton()}
               className="px-4 py-2 border border-red-500  w-fit  bg-red-400 text-white rounded-xl"
             >
               {isBurnAgeLoading && "Waiting for Approval"}

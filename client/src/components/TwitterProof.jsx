@@ -126,7 +126,6 @@ const TwitterFollowers = () => {
       const response = await axios.get(
         `http://localhost:8080/api/twitter/generate-call-data?followers=${getFollowers}&threshold=${getThreshold}`
       );
-      console.log(response);
       return response.data;
     } catch (error) {
       console.log(error);
