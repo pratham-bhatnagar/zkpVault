@@ -172,7 +172,7 @@ const Verify = () => {
         {isConnected &&
           (!verifiedAge || !verifiedCredit || !verifiedTwitter) && (
             <p className="font-extrabold">
-              Sorry Boss, You're not eligible 🔞🥹
+              Sorry ser, You're not eligible 🔞🥹
             </p>
           )}
         {isConnected && verifiedAge && verifiedCredit && verifiedTwitter && (

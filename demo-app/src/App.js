@@ -30,6 +30,8 @@ function App() {
           <p className="text-center font-extrabold text-xl">
             Powered by zkpVault 🔐
           </p>
+          <p className="px-3 py-1 bg-cyan-700 cursor-pointer font-xl rounded-xl text-white underline font-bold">zkpVault ↗</p>
+
           <div className="mt-8"> </div>{" "}
         </div>
         <Verify />
