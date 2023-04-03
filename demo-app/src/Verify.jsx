@@ -39,7 +39,7 @@ const Verify = () => {
     watch: true,
     args: [address],
   });
-  
+
 
   const { data: addressVerifiedAge } = useContractRead({
     ...zkpVaultContractConfigAge,
@@ -184,7 +184,7 @@ const Verify = () => {
         {isConnected && verifiedAge && verifiedCredit && verifiedTwitter && (
           <button
             onClick={() => {handleTweet()}}
-            className="px-6 py-1 flex gap-2 items-center rounded-full bg-[#02A9F5] text-white font-bold"
+            className="px-6 py-1 flex gap-2 items-center rounded-full bg-[#02A9F5] text-white font-bold cursor-pointer"
           >
            <img className="w-[40px] h-[40px]" src="./twitter.svg"/>
             Tweet for Karma!!
