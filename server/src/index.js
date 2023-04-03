@@ -8,13 +8,11 @@ const corsOptions = {
   // To allow requests from client
   origin: [
     "*"
-  ],
-  credentials: true,
-  exposedHeaders: ["set-cookie"],
+  ]
 };
 
 app.set("trust proxy", true);
-app.use(cors());
+app.use(cors(corsOptions));
 app.get("/", (req, res) => {
   res.json({
     success: true,
