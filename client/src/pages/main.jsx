@@ -31,9 +31,9 @@ const Main = () => {
           Mint your own SBT
         </button></a>
 
-        <button className=" w-[170px]  py-3 bg-[#191919] text-white rounded-md font-semibold">
+        <a href="https://zkp-vault-demo.vercel.app/"><button className=" w-[170px]  py-3 bg-[#191919] text-white rounded-md font-semibold">
           Demo App ↗
-        </button>
+        </button></a>
       </div>
     </div>
   );
