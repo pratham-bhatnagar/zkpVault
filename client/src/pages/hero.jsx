@@ -2,7 +2,9 @@ const Hero = () => {
   return (
     <div className="h-[100vh] w-full bg-[url('https://img.freepik.com/free-vector/white-background-with-zigzag-pattern-design_1017-33197.jpg')]">
       <div className="p-3 px-[8vw] flex justify-between">
-        <p className="text-3xl text-blue-500 font-bold cursor-pointer">zkpVault </p>
+        <p className="text-3xl text-blue-500 font-bold cursor-pointer">
+          zkpVault{" "}
+        </p>
         <a href="/main">
           {" "}
           <button className=" px-3 py-2 bg-[#191919] text-white rounded-md font-semibold">
@@ -30,13 +32,19 @@ const Hero = () => {
         className="flex justify-center gap-4
       "
       >
-        <button className=" w-[150px]  py-3 bg-[#191919] text-white rounded-md font-semibold">
-          Github
-        </button>
+        <a href="https://github.com/pratham-bhatnagar/zkpVault">
+          {" "}
+          <button className=" w-[150px]  py-3 bg-[#191919] text-white rounded-md font-semibold">
+            Github ↗
+          </button>
+        </a>
 
-        <button className=" w-[150px]  py-3 bg-[#191919] text-white rounded-md font-semibold">
-          Devfolio
-        </button>
+        <a href="https://devfolio.co/projects/zkpvault-b280">
+          {" "}
+          <button className=" w-[150px]  py-3 bg-[#191919] text-white rounded-md font-semibold">
+            Devfolio ↗
+          </button>
+        </a>
       </div>
     </div>
   );
